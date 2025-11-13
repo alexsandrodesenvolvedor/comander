@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: infraestrutura_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: infra
+      POSTGRES_PASSWORD: please_change_me
+      POSTGRES_DB: infra_db
+      DB_ROLE: infra_role
+      DB_ROLE_PASSWORD: change_me_role_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U infra"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - infraestrutura_network
+
+volumes:
+  postgres_data:
+    name: infraestrutura_postgres_data
+
+networks:
+  infraestrutura_network:
+    name: infraestrutura_network
+    driver: bridge
