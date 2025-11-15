@@ -1,0 +1,1 @@
+insert into customer values (-3, now(), now(), 'teste', 'phone');
