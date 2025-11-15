@@ -1,4 +1,4 @@
-package com.alexsandro.comander.entities;
+package com.alexsandro.commander.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

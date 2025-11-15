@@ -1,4 +1,4 @@
-package com.alexsandro.comander.entities;
+package com.alexsandro.commander.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Table(name = "beauty_procedure")
-public class BeautyProcedureEntity extends BaseEntity {
+public class BeautyProcedure extends BaseEntity {
 
     @Column(length = 100)
     private String name;
@@ -24,6 +24,6 @@ public class BeautyProcedureEntity extends BaseEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "beautyProcedure", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AppointmentEntity> appointment;
+    private List<Appointment> appointment;
 
 }

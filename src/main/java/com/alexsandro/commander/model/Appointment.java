@@ -1,4 +1,4 @@
-package com.alexsandro.comander.entities;
+package com.alexsandro.commander.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @Table(name = "appointment")
-public class AppointmentEntity extends BaseEntity {
+public class Appointment extends BaseEntity {
 
     @Column(name = "appointment_date_time")
     private LocalDateTime appointmentDateTime;
@@ -20,10 +20,10 @@ public class AppointmentEntity extends BaseEntity {
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
-    private CustomerEntity customer;
+    private Customer customer;
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name = "beauty_procedure_id", nullable = false)
-    private BeautyProcedureEntity beautyProcedure;
+    private BeautyProcedure beautyProcedure;
 
 }

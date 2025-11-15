@@ -1,4 +1,4 @@
-package com.alexsandro.comander;
+package com.alexsandro.commander;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

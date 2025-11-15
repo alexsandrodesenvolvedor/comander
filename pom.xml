@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.alexsandro</groupId>
-    <artifactId>comander</artifactId>
+    <artifactId>commander</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>comander</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Projeto comandante para sistema de beleza</description>
     <url/>
     <licenses>
         <license/>
