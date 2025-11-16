@@ -1,6 +1,7 @@
 server:
-  port: 8080
-  path: /api/commander
+  port: 8081
+  servlet:
+    context-path: /api/commander
 
 spring:
   application:
@@ -18,6 +19,7 @@ spring:
       max-lifetime: 600000
       connection-timeout: 20000
   jpa:
+    open-in-view: false
     hibernate:
     show-sql: true
     properties:
