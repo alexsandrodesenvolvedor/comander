@@ -6,7 +6,7 @@ import com.alexsandro.commander.dto.CustomerUpdateDTO;
 import com.alexsandro.commander.model.Customer;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+//@Mapper(componentModel = "spring")
 public interface CustomerMapper {
 
     Customer toEntity(CustomerUpdateDTO dto);

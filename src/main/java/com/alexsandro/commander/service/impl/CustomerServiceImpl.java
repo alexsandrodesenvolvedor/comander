@@ -8,6 +8,8 @@ import com.alexsandro.commander.repository.CustomerRepository;
 import com.alexsandro.commander.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +17,26 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = {@Lazy})
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerServiceImpl self;
     private final CustomerMapper customerMapper;
 
-    public Customer create(Customer customer) {
+    @Transactional()
+    public Customer create(Customer customer) throws Exception {
         log.info("Salvando entidade Customer: {}", customer);
-        return customerRepository.save(customer);
+        Customer save = customerRepository.save(customer);
+        atualizarTeste(save);
+        return save;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void atualizarTeste(Customer customer) throws Exception {
+            customer.setName("atualizarTeste");
+            customerRepository.save(customer);
+            throw new Exception("Teste de rollback");
     }
 
     public Optional<Customer> get(Long id) {

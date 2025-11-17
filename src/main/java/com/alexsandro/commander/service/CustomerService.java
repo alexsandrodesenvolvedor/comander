@@ -8,10 +8,11 @@ import java.util.Optional;
 
 public interface CustomerService {
 
-    Customer create(Customer customer);
+    Customer create(Customer customer) throws Exception;
 
     Optional<Customer> get(Long id);
 
     Optional<CustomerResponseDTO> update(Long id, CustomerUpdateDTO dto);
 
+    void atualizarTeste(Customer save) throws Exception;
 }
