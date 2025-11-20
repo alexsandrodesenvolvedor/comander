@@ -1,10 +1,9 @@
 package com.alexsandro.commander.controller;
 
-import com.alexsandro.commander.dto.CustomerCreateDTO;
+import com.alexsandro.commander.dto.CustomerRequestDTO;
 import com.alexsandro.commander.dto.CustomerResponseDTO;
-import com.alexsandro.commander.dto.CustomerUpdateDTO;
+import com.alexsandro.commander.exception.NotFoundException;
 import com.alexsandro.commander.mapper.CustomerMapper;
-import com.alexsandro.commander.model.Customer;
 import com.alexsandro.commander.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,24 +20,20 @@ public class CustomerController {
     private final CustomerMapper customerMapper;
 
     @PostMapping
-    public ResponseEntity<CustomerResponseDTO> create(@Valid @RequestBody CustomerCreateDTO dto) {
-        try {
-            Customer customer = customerService.create(customerMapper.toEntity(dto));
-            return ResponseEntity.status(HttpStatus.CREATED).body(customerMapper.toDTO(customer));
-        } catch (Exception _) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public CustomerResponseDTO create(@Valid @RequestBody CustomerRequestDTO dto) {
+        return customerService.create(dto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> get(@PathVariable Long id) {
-        return customerService.get(id)
-                .map(c -> ResponseEntity.ok().body(customerMapper.toDTO(c)))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerResponseDTO get(@PathVariable Long id) {
+        return customerService.get(id).map(customerMapper::toDTO)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> update(@PathVariable Long id, @Valid @RequestBody CustomerUpdateDTO dto) {
+    public ResponseEntity<CustomerResponseDTO> update(@PathVariable Long id, @Valid @RequestBody CustomerRequestDTO dto) {
         return customerService.update(id, dto).map(updatedCustomer ->
                 ResponseEntity.ok().body(updatedCustomer)
         ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
