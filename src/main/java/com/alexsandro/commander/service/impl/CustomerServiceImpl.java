@@ -1,14 +1,13 @@
 package com.alexsandro.commander.service.impl;
 
+import com.alexsandro.commander.dto.CustomerRequestDTO;
 import com.alexsandro.commander.dto.CustomerResponseDTO;
-import com.alexsandro.commander.dto.CustomerUpdateDTO;
 import com.alexsandro.commander.mapper.CustomerMapper;
 import com.alexsandro.commander.model.Customer;
 import com.alexsandro.commander.repository.CustomerRepository;
 import com.alexsandro.commander.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,19 +23,12 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerServiceImpl self;
     private final CustomerMapper customerMapper;
 
-    @Transactional()
-    public Customer create(Customer customer) throws Exception {
-        log.info("Salvando entidade Customer: {}", customer);
-        Customer save = customerRepository.save(customer);
-        atualizarTeste(save);
-        return save;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public void atualizarTeste(Customer customer) throws Exception {
-            customer.setName("atualizarTeste");
-            customerRepository.save(customer);
-            throw new Exception("Teste de rollback");
+    @Transactional
+    public CustomerResponseDTO create(CustomerRequestDTO dto) {
+        log.info("Salvando entidade Customer: {}", dto);
+        Customer customer = customerMapper.toEntity(dto);
+        customerRepository.save(customer);
+        return customerMapper.toDTO(customer);
     }
 
     public Optional<Customer> get(Long id) {
@@ -46,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
         });
     }
 
-    public Optional<CustomerResponseDTO> update(Long id, CustomerUpdateDTO dto) {
+    public Optional<CustomerResponseDTO> update(Long id, CustomerRequestDTO dto) {
         Optional<Customer> existingCustomer = get(id);
         return existingCustomer.map(c -> {
             //customerMapper.updateEntityFromDTO(dto, c);
