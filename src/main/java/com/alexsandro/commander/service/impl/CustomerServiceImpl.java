@@ -2,6 +2,7 @@ package com.alexsandro.commander.service.impl;
 
 import com.alexsandro.commander.dto.CustomerRequestDTO;
 import com.alexsandro.commander.dto.CustomerResponseDTO;
+import com.alexsandro.commander.exception.NotFoundException;
 import com.alexsandro.commander.mapper.CustomerMapper;
 import com.alexsandro.commander.model.Customer;
 import com.alexsandro.commander.repository.CustomerRepository;
@@ -31,20 +32,30 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.toDTO(customer);
     }
 
-    public Optional<Customer> get(Long id) {
-        return customerRepository.findById(id).or(() -> {
-            log.warn("Entidade Customer com id {} não encontrada ", id);
-            return Optional.empty();
-        });
+    public CustomerResponseDTO get(Long id) {
+        return customerRepository.findById(id)
+                .map(customerMapper::toDTO)
+                .orElseThrow(() -> new NotFoundException("Cliente não encontrado com id: " + id));
     }
 
-    public Optional<CustomerResponseDTO> update(Long id, CustomerRequestDTO dto) {
-        Optional<Customer> existingCustomer = get(id);
+    /**
+     * Método interno para obter a entidade Customer.
+     *
+     * @param id ID do cliente.
+     * @return Optional contendo a entidade Customer, se encontrada.
+     */
+    public Optional<Customer> getEntity(Long id) {
+        return customerRepository.findById(id);
+    }
+
+    @Transactional
+    public CustomerResponseDTO update(Long id, CustomerRequestDTO dto) {
+        Optional<Customer> existingCustomer = getEntity(id);
         return existingCustomer.map(c -> {
-            //customerMapper.updateEntityFromDTO(dto, c);
+            customerMapper.updateEntityFromDTO(dto, c);
             customerRepository.save(c);
-            return null;//customerMapper.toDTO(c);
-        });
+            return customerMapper.toDTO(c);
+        }).orElseThrow(() -> new NotFoundException("Cliente não encontrado com id: " + id));
     }
 
 }

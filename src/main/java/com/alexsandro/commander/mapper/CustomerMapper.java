@@ -11,5 +11,6 @@ public interface CustomerMapper {
     Customer toEntity(CustomerRequestDTO dto);
     CustomerResponseDTO toDTO(Customer customer);
     CustomerResponseDTO toDTO(CustomerRequestDTO dto);
+    void updateEntityFromDTO(CustomerRequestDTO dto, Customer entity);
 
 }
