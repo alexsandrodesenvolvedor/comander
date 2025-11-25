@@ -2,7 +2,6 @@ package com.alexsandro.commander.controller;
 
 import com.alexsandro.commander.dto.CustomerRequestDTO;
 import com.alexsandro.commander.dto.CustomerResponseDTO;
-import com.alexsandro.commander.mapper.CustomerMapper;
 import com.alexsandro.commander.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +29,11 @@ public class CustomerController {
     @PutMapping("/{id}")
     public CustomerResponseDTO update(@PathVariable Long id, @Valid @RequestBody CustomerRequestDTO dto) {
         return customerService.update(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        customerService.delete(id);
     }
 
 }

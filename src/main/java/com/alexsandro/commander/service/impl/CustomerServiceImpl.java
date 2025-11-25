@@ -58,4 +58,11 @@ public class CustomerServiceImpl implements CustomerService {
         }).orElseThrow(() -> new NotFoundException("Cliente não encontrado com id: " + id));
     }
 
+    @Transactional
+    public void delete(Long id) {
+        Optional<Customer> existingCustomer = getEntity(id);
+        existingCustomer.ifPresentOrElse(customerRepository::delete,
+                () -> { throw new NotFoundException("Cliente não encontrado com id: " + id); });
+    }
+
 }
