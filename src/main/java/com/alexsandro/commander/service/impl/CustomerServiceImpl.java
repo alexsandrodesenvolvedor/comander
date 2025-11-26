@@ -52,7 +52,8 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponseDTO update(Long id, CustomerRequestDTO dto) {
         Optional<Customer> existingCustomer = getEntity(id);
         return existingCustomer.map(c -> {
-            customerMapper.updateEntityFromDTO(dto, c);
+            c.setName(dto.getName());
+            c.setPhone(dto.getPhone());
             customerRepository.save(c);
             return customerMapper.toDTO(c);
         }).orElseThrow(() -> new NotFoundException("Cliente não encontrado com id: " + id));
